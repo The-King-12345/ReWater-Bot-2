@@ -1,32 +1,27 @@
-const DiscordJS = require('discord.js')
-const WOKCommands = require('wokcommands')
-const path = require('path')
-const keepAlive = require('./server')
+const express = require('express')
 
-const TOKEN = process.env['TOKEN']
-const MONGODB_URI = process.env['MONGODB_URI']
+const server = express()
 
-const { Intents } = DiscordJS
 
-const client = new DiscordJS.Client({
-  intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-    Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-  ]
-})
 
-client.on('ready', () => {
-  new WOKCommands(client, {
-    commandsDir: path.join(__dirname, 'commands'),
-    showWarns: false,
-    mongoUri: (MONGODB_URI)
-  })
+server.all('/', (req, res)=>{
+
+   res.setHeader('Content-Type', 'text/html')
+
+   res.write('<link href="https://fonts.googleapis.com/css?family=Roboto Condensed" rel="stylesheet"> <style> body {font-family: "Roboto Condensed";font-size: 22px;} <p>Hosting Active</p>');
+
+   res.end();
+
 })
 
 
 
+function keepAlive(){
 
-keepAlive()
-client.login(TOKEN)
+   server.listen(3000, ()=>{console.log("Server is online!")})
+
+}
+
+
+
+module.exports = keepAlive;
